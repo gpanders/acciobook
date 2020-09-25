@@ -49,8 +49,12 @@ class Parser(HTMLParser):
     p = False
     done = False
 
-    def __init__(self, start_chapter: int, end_chapter: Optional[int]):
+    def __init__(
+        self, book: str, narrator: str, start_chapter: int, end_chapter: Optional[int]
+    ):
         super().__init__()
+        self.book = book
+        self.narrator = narrator
         self.start = start_chapter
         self.end = end_chapter
 
@@ -91,7 +95,7 @@ class Parser(HTMLParser):
                 name = match.group(2)
                 url = attr_dict["src"]
                 output = Path("{:02} {}.mp3".format(chapter, name))
-                src = AudioSource(chapter, url)
+                src = AudioSource(chapter, url, name, self.book, self.narrator)
                 src.download(output)
 
     def handle_endtag(self, tag):
@@ -114,6 +118,9 @@ class Parser(HTMLParser):
 class AudioSource:
     chapter: int
     url: str
+    name: str
+    book: str
+    narrator: str
 
     def download(self, output: Path) -> None:
         logging.info("Downloading chapter %s from %s", self.chapter, self.url)
@@ -124,7 +131,11 @@ class AudioSource:
 
         audio = MP3(output)
         tags = audio.tags or ID3()
+        tags["title"] = [self.name]
+        tags["album"] = [self.book]
         tags["tracknumber"] = [self.chapter]
+        tags["composer"] = ["J.K. Rowling"]
+        tags["artist"] = [self.narrator]
         audio.tags = tags
         audio.save()
 
@@ -174,10 +185,10 @@ def ask_for_int(prompt: str) -> Optional[int]:
 
 
 def scrape(
-    book_number: int, author: str, start_chapter: int, end_chapter: Optional[int]
+    book_number: int, narrator: str, start_chapter: int, end_chapter: Optional[int]
 ) -> None:
-    parser = Parser(start_chapter, end_chapter)
-    url = BASE_URL + BOOK_URLS[author][book_number]
+    parser = Parser(BOOK_TITLES[book_number], narrator, start_chapter, end_chapter)
+    url = BASE_URL + BOOK_URLS[narrator][book_number]
     page = 1
     while not parser.done:
         r = requests.get(f"{url}/{page}/")
@@ -211,11 +222,11 @@ def run() -> None:
 
     book = choose_from_list(BOOK_TITLES, "Which book do you want to download?")
     book_number = BOOK_TITLES.index(book)
-    author = choose_from_list(list(BOOK_URLS.keys()), "Select a narrator.")
+    narrator = choose_from_list(list(BOOK_URLS.keys()), "Select a narrator.")
 
     start_chapter = ask_for_int("Start chapter (Default: 1)")
     if not start_chapter:
         start_chapter = 1
 
     end_chapter = ask_for_int("End chapter (Leave empty to download all chapters)")
-    scrape(book_number, author, start_chapter, end_chapter)
+    scrape(book_number, narrator, start_chapter, end_chapter)
