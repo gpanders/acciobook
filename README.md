@@ -24,7 +24,7 @@ Usage
 -----
 
 Usage is straightforward. Simply run `acciobook` (or `poetry run acciobook` if
-[installed from source](#from-source)). You will be asked to make selections
+[installed from source](#poetry)). You will be asked to make selections
 for which book to download, which narrator you prefer ([Stephen Fry][fry] or
 [Jim Dale][dale]) and which chapters to download. The default settings are to
 download all chapters of the book.
