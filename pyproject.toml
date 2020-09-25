@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "accio"
+name = "acciobook"
 version = "0.1.0"
 description = "Scrape Harry Potter audiobooks from the web"
 authors = ["Gregory Anders <pub@gpanders.com>"]
@@ -14,7 +14,7 @@ mutagen = "^1.45.1"
 pre-commit = "^2.7.1"
 
 [tool.poetry.scripts]
-accio = "accio.main:run"
+acciobook = "acciobook.main:run"
 
 [build-system]
 requires = ["poetry>=0.12"]
