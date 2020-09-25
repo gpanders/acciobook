@@ -8,6 +8,18 @@ acciobook
 Installation
 ------------
 
+### pip
+
+If you have [pipx][] installed, simply use
+
+    pipx install acciobook
+
+Otherwise, use pip with the `--user` flag:
+
+    pip install --user acciobook
+
+[pipx]: https://pipxproject.github.io/pipx/
+
 ### Poetry
 
 Ensure [poetry][] is installed. Then run the following commands:
@@ -23,7 +35,7 @@ Run using `poetry run acciobook`.
 Usage
 -----
 
-Usage is straightforward. Simply run `acciobook` (or `poetry run acciobook` if
+Usage is straightforward: simply run `acciobook` (or `poetry run acciobook` if
 [installed from source](#poetry)). You will be asked to make selections
 for which book to download, which narrator you prefer ([Stephen Fry][fry] or
 [Jim Dale][dale]) and which chapters to download. The default settings are to
