@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "acciobook"
-version = "0.1.0"
+version = "0.1.1"
 description = "Scrape Harry Potter audiobooks from the web"
 authors = ["Gregory Anders <pub@gpanders.com>"]
 license = "MIT"
