@@ -1,8 +1,7 @@
 #!/bin/sh
 
 # Build wheel and source distribution files and upload them to the associated
-# ref on sourcehut. SRHT_TOKEN environment variable must be set with a
-# sourcehut personal access token.
+# ref on sourcehut and to PyPI.
 
 set -eu
 
@@ -24,6 +23,11 @@ git worktree add "$tmpdir" "$last_tag"
 cd "$tmpdir"
 
 poetry build
+
+# Upload to PyPI
+poetry publish -u "$PYPI_USERNAME" -p "$PYPI_PASSWORD"
+
+# Upload to sourcehut
 curl -H Authorization:"token $SRHT_TOKEN" -F file=@dist/acciobook-"$version"-py3-none-any.whl https://git.sr.ht/api/repos/acciobook/artifacts/"$last_tag"
 curl -H Authorization:"token $SRHT_TOKEN" -F file=@dist/acciobook-"$version".tar.gz https://git.sr.ht/api/repos/acciobook/artifacts/"$last_tag"
 
